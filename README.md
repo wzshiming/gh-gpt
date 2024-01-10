@@ -35,3 +35,7 @@ curl --location 'http://127.0.0.1:8000/v1/chat/completions' \
 }' | jq -r '.choices[0].message.content'
 # I am an artificial intelligence designed to assist with information and tasks. How can I help you today?
 ```
+
+### As a library
+
+See [examples](https://github.com/wzshiming/gh-gpt/blob/master/test/all_test.go).
