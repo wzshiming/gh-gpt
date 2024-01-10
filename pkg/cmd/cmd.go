@@ -3,6 +3,7 @@ package cmd
 import (
 	"github.com/spf13/cobra"
 	"github.com/wzshiming/gh-gpt/pkg/cmd/run"
+	"github.com/wzshiming/gh-gpt/pkg/cmd/server"
 )
 
 func NewCommand() *cobra.Command {
@@ -16,6 +17,7 @@ func NewCommand() *cobra.Command {
 
 	cmd.AddCommand(
 		run.NewCommand(),
+		server.NewCommand(),
 	)
 	return cmd
 }

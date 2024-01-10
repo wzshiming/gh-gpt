@@ -16,7 +16,7 @@ import (
 	"golang.org/x/term"
 )
 
-type generateOptions struct {
+type runOptions struct {
 	Model          string
 	System         string
 	Content        string
@@ -25,7 +25,7 @@ type generateOptions struct {
 }
 
 func NewCommand() *cobra.Command {
-	opts := generateOptions{
+	opts := runOptions{
 		Model:          "gpt-4",
 		System:         "You are a helpful assistant.",
 		Stream:         true,
@@ -49,7 +49,7 @@ func NewCommand() *cobra.Command {
 				return fmt.Errorf("no content")
 			}
 
-			return generate(cmd, opts)
+			return run(cmd, opts)
 		},
 	}
 
@@ -61,7 +61,7 @@ func NewCommand() *cobra.Command {
 	return cmd
 }
 
-func generate(cmd *cobra.Command, opts generateOptions) error {
+func run(cmd *cobra.Command, opts runOptions) error {
 	ctx := cmd.Context()
 	var a = auth.Hosts()
 

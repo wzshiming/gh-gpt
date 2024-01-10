@@ -8,6 +8,7 @@ import (
 	"syscall"
 
 	"github.com/wzshiming/gh-gpt/pkg/cmd"
+	"time"
 )
 
 func main() {
@@ -22,7 +23,7 @@ func main() {
 	go func() {
 		<-sigChan
 		cancel()
-		<-sigChan
+		time.Sleep(time.Second)
 		os.Exit(1)
 	}()
 

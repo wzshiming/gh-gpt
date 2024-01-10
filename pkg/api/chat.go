@@ -134,9 +134,9 @@ type Message struct {
 
 type ChatResponse struct {
 	Choices []Choice `json:"choices"`
-	Created int64    `json:"created"`
+	Created int64    `json:"created,omitempty"`
 	ID      string   `json:"id"`
-	Usage   Usage    `json:"usage"`
+	Usage   Usage    `json:"usage,omitempty"`
 }
 
 type Usage struct {
@@ -147,9 +147,9 @@ type Usage struct {
 
 type Choice struct {
 	FinishReason string  `json:"finish_reason,omitempty"`
-	Index        int64   `json:"index"`
-	Message      Message `json:"message"`
-	Delta        Message `json:"delta"`
+	Index        int64   `json:"index,omitempty"`
+	Message      Message `json:"message,omitempty"`
+	Delta        Message `json:"delta,omitempty"`
 }
 
 type FilterResult struct {
