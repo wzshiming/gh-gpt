@@ -42,7 +42,7 @@ func NewCommand() *cobra.Command {
 
 func run(cmd *cobra.Command, opts serverOptions) error {
 
-	a := auth.Hosts()
+	hosts := auth.Hosts()
 
 	var err error
 	// expand the '~' for opts.TokenCachePath
@@ -65,7 +65,7 @@ func run(cmd *cobra.Command, opts serverOptions) error {
 
 	svc := server.NewServer(
 		server.WithClient(cli),
-		server.WithAuth(a),
+		server.WithAuth(hosts),
 	)
 
 	handler := server.CORS(http.HandlerFunc(svc.ChatCompletions))

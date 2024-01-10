@@ -63,9 +63,9 @@ func NewCommand() *cobra.Command {
 
 func run(cmd *cobra.Command, opts runOptions) error {
 	ctx := cmd.Context()
-	var a = auth.Hosts()
+	hosts := auth.Hosts()
 
-	oauth, err := a.GetToken()
+	oauth, err := hosts.GetToken()
 	if err != nil {
 		return fmt.Errorf("failed to get oauth token: %w", err)
 	}

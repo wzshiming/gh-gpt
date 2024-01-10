@@ -6,9 +6,9 @@ import (
 	"os"
 	"os/signal"
 	"syscall"
+	"time"
 
 	"github.com/wzshiming/gh-gpt/pkg/cmd"
-	"time"
 )
 
 func main() {

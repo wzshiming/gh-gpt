@@ -94,7 +94,7 @@ func (s *Server) ChatCompletions(w http.ResponseWriter, r *http.Request) {
 
 	setRespHeaders(w.Header())
 
-	encodeer := json.NewEncoder(w)
+	encoder := json.NewEncoder(w)
 
 	fn := func(chatResponse api.ChatResponse) error {
 		if req.Stream {
@@ -104,7 +104,7 @@ func (s *Server) ChatCompletions(w http.ResponseWriter, r *http.Request) {
 			}
 		}
 
-		err := encodeer.Encode(chatResponse)
+		err := encoder.Encode(chatResponse)
 		if err != nil {
 			return err
 		}
