@@ -38,4 +38,20 @@ curl --location 'http://127.0.0.1:8000/v1/chat/completions' \
 
 ### As a library
 
-See [examples](https://github.com/wzshiming/gh-gpt/blob/master/test/all_test.go).
+``` golang
+package main
+
+import (
+	"context"
+	"os"
+
+	"github.com/wzshiming/gh-gpt/pkg/run"
+)
+
+func main() {
+	_ = run.RunStream(context.Background(), "Who are you?", os.Stdout)
+	// I am an artificial intelligence designed to assist with information and tasks. How can I help you today?
+}
+```
+
+
