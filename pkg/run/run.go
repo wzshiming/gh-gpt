@@ -4,10 +4,10 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"io"
 	"os"
 	"path/filepath"
 	"strings"
-	"io"
 
 	"github.com/wzshiming/gh-gpt/pkg/api"
 	"github.com/wzshiming/gh-gpt/pkg/auth"
@@ -64,9 +64,9 @@ func run(ctx context.Context, content string, stream bool, out io.Writer, opts .
 		o(&opt)
 	}
 
-	hosts := auth.Hosts()
+	auths := auth.Auths{auth.Envs(), auth.Hosts()}
 
-	oauth, err := hosts.GetToken()
+	oauth, err := auths.GetToken()
 	if err != nil {
 		return fmt.Errorf("failed to get oauth token: %w", err)
 	}

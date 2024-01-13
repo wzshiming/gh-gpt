@@ -34,7 +34,8 @@ func (c *Client) TokenWishCache(ctx context.Context, oauthToken string) (string,
 
 // Token retrieves the token from the GitHub Copilot API.
 func (c *Client) Token(ctx context.Context, oauthToken string) (*TokenResponse, error) {
-	if !strings.HasPrefix(oauthToken, "ghu_") {
+	// https://github.blog/2021-04-05-behind-githubs-new-authentication-token-formats/#identifiable-prefixes
+	if !strings.HasPrefix(oauthToken, "gh") {
 		return nil, errors.New("invalid token format")
 	}
 

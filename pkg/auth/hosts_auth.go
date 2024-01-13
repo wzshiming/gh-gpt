@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"os"
 	"path"
+	"runtime"
 )
 
 type hostsAuth struct{}
@@ -18,7 +19,11 @@ func (hostsAuth) GetToken() (string, error) {
 		return "", err
 	}
 
-	p := path.Join(home, ".config/github-copilot/hosts.json")
+	configPath := ".config"
+	if runtime.GOOS == "windows" {
+		configPath = "AppData/Local"
+	}
+	p := path.Join(home, configPath, "github-copilot/hosts.json")
 	data, err := os.ReadFile(p)
 	if err != nil {
 		if os.IsNotExist(err) {

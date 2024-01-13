@@ -2,9 +2,28 @@
 
 This is a simple tool to use the GitHub Copilot API as a GPT API.
 
-## Ensure you have a GitHub Copilot API key
+## Ensure you can access the GitHub Copilot API
 
-The `~/.config/github-copilot/hosts.json` file is created when you log in to [Copilot](https://github.com/features/copilot) in an editor (VS Code, IDEA, etc.).
+There are two ways to access the GitHub Copilot API.
+
+### Login Copilot in IDE
+
+Windows: `~\AppData\Local\github-copilot\hosts.json`
+Other: `~/.config/github-copilot/hosts.json`
+
+The file is created when you log in to [Copilot](https://github.com/features/copilot) in an [IDE](https://github.com/settings/copilot)
+
+- JetBrains (tested)
+- VS Code
+- ...
+
+### Setup Environment
+
+I have only tested `ghu_` of [Identifiable prefixes](https://github.blog/2021-04-05-behind-githubs-new-authentication-token-formats/#identifiable-prefixes)
+
+``` bash
+GH_TOKEN=ghu_XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+```
 
 ## Usage
 
@@ -53,5 +72,3 @@ func main() {
 	// I am an artificial intelligence designed to assist with information and tasks. How can I help you today?
 }
 ```
-
-
