@@ -129,3 +129,19 @@ func (s *Server) ChatCompletions(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 }
+
+func (s *Server) Ping(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodGet {
+		respJSONError(w, http.StatusMethodNotAllowed, "Method not allowed")
+		return
+	}
+
+	ctx := r.Context()
+	resp, err := s.client.Ping(ctx)
+	if err != nil {
+		respJSONError(w, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	w.Write([]byte(resp))
+}

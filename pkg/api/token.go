@@ -44,7 +44,7 @@ func (c *Client) Token(ctx context.Context, oauthToken string) (*TokenResponse, 
 		return nil, err
 	}
 
-	req.Header.Set("User-Agent", "GitHubCopilotChat/0.8.0")
+	req.Header.Set("User-Agent", userAgent)
 	req.Header.Set("Authorization", "token "+oauthToken)
 
 	resp, err := c.client.Do(req)

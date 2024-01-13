@@ -28,6 +28,7 @@ func NewCommand() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "server",
 		Short: "Run the server",
+		Args:  cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			slog.Info("Starting server", "address", opts.Address)
 			return run(cmd, opts)
@@ -68,6 +69,9 @@ func run(cmd *cobra.Command, opts serverOptions) error {
 		server.WithAuth(auths),
 	)
 
-	handler := server.CORS(http.HandlerFunc(svc.ChatCompletions))
-	return http.ListenAndServe(opts.Address, handler)
+	mux := http.NewServeMux()
+	mux.HandleFunc("/v1/chat/completions", svc.ChatCompletions)
+	mux.HandleFunc("/_ping", svc.Ping)
+
+	return http.ListenAndServe(opts.Address, server.CORS(mux))
 }

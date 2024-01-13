@@ -21,6 +21,10 @@ func WithHTTPClient(c *http.Client) func(*Client) {
 	}
 }
 
+const (
+	userAgent = "GitHubCopilotChat/0.8.0"
+)
+
 type Client struct {
 	client     *http.Client
 	tokenCache cache.Cache

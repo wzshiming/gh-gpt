@@ -164,5 +164,5 @@ func setReqHeaders(h http.Header, authorization string) {
 	h.Set("Openai-Organization", "github-copilot")
 	h.Set("Openai-Intent", "conversation-panel")
 	h.Set("Content-Type", "text/event-stream; charset=utf-8")
-	h.Set("User-Agent", "GitHubCopilotChat/0.8.0")
+	h.Set("User-Agent", userAgent)
 }
