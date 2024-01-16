@@ -11,9 +11,12 @@ func Envs() Auth {
 }
 
 func (envsAuth) GetToken() (string, error) {
-	token, ok := os.LookupEnv("GH_TOKEN")
+	token, ok := os.LookupEnv("GH_COPILOT_TOKEN")
 	if !ok {
-		return "", ErrNotExists
+		token, ok = os.LookupEnv("GH_TOKEN")
+		if !ok {
+			return "", ErrNotExists
+		}
 	}
 	return token, nil
 }

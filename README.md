@@ -22,7 +22,7 @@ The file is created when you log in to [Copilot](https://github.com/features/cop
 I have only tested `ghu_` of [Identifiable prefixes](https://github.blog/2021-04-05-behind-githubs-new-authentication-token-formats/#identifiable-prefixes)
 
 ``` bash
-GH_TOKEN=ghu_XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+GH_COPILOT_TOKEN=ghu_XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 ```
 
 ## Usage

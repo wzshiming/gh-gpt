@@ -64,7 +64,7 @@ func run(ctx context.Context, content string, stream bool, out io.Writer, opts .
 		o(&opt)
 	}
 
-	auths := auth.Auths{auth.Envs(), auth.Hosts()}
+	auths := auth.Auths{auth.Hosts(), auth.Envs()}
 
 	oauth, err := auths.GetToken()
 	if err != nil {

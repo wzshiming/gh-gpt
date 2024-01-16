@@ -43,7 +43,7 @@ func NewCommand() *cobra.Command {
 
 func run(cmd *cobra.Command, opts serverOptions) error {
 
-	auths := auth.Auths{auth.Envs(), auth.Hosts()}
+	auths := auth.Auths{auth.Hosts(), auth.Envs()}
 
 	var err error
 	// expand the '~' for opts.TokenCachePath
