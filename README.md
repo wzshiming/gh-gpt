@@ -6,6 +6,18 @@ This is a simple tool to use the GitHub Copilot API as a GPT API.
 
 There are two ways to access the GitHub Copilot API.
 
+### Login
+
+```bash
+gh-gpt login
+```
+
+```console                                                                                                                 
+Please take this code "0000-0000" to authenticate at https://github.com/login/device.
+Press 'y' to continue, or any other key to abort.
+Waiting for authentication...
+```
+
 ### Login Copilot in IDE
 
 Windows: `~\AppData\Local\github-copilot\hosts.json`
