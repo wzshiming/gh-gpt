@@ -5,13 +5,12 @@ import (
 	"errors"
 	"fmt"
 	"io"
-	"os"
-	"path/filepath"
 	"strings"
 
 	"github.com/wzshiming/gh-gpt/pkg/api"
 	"github.com/wzshiming/gh-gpt/pkg/auth"
 	"github.com/wzshiming/gh-gpt/pkg/cache"
+	"github.com/wzshiming/gh-gpt/pkg/utils"
 )
 
 type option struct {
@@ -19,6 +18,7 @@ type option struct {
 	TokenCachePath string
 	Messages       []api.Message
 	Stream         bool
+	Auth           auth.Auth
 }
 
 type Option func(*option)
@@ -32,6 +32,12 @@ func WithModel(model string) Option {
 func WithTokenCachePath(path string) Option {
 	return func(opt *option) {
 		opt.TokenCachePath = path
+	}
+}
+
+func WithAuth(a auth.Auths) Option {
+	return func(opt *option) {
+		opt.Auth = a
 	}
 }
 
@@ -58,30 +64,21 @@ func run(ctx context.Context, content string, stream bool, out io.Writer, opts .
 	opt := option{
 		Model:          "gpt-4",
 		TokenCachePath: "~/.gh-gpt/token.json",
+		Auth:           auth.Auths{auth.Hosts(), auth.Envs()},
 		Stream:         stream,
 	}
 	for _, o := range opts {
 		o(&opt)
 	}
 
-	auths := auth.Auths{auth.Hosts(), auth.Envs()}
-
-	oauth, err := auths.GetToken()
+	oauth, err := opt.Auth.GetToken(ctx)
 	if err != nil {
 		return fmt.Errorf("failed to get oauth token: %w", err)
 	}
 
-	// expand the '~' for opt.TokenCachePath
-	if strings.HasPrefix(opt.TokenCachePath, "~") {
-		home, err := os.UserHomeDir()
-		if err != nil {
-			return fmt.Errorf("failed to get home dir: %w", err)
-		}
-		opt.TokenCachePath = filepath.Join(home, opt.TokenCachePath[1:])
-	}
-	opt.TokenCachePath, err = filepath.Abs(opt.TokenCachePath)
+	opt.TokenCachePath, err = utils.ExpandPath(opt.TokenCachePath)
 	if err != nil {
-		return fmt.Errorf("failed to get token cache path: %w", err)
+		return err
 	}
 
 	tokenCache := cache.NewFileCache(opt.TokenCachePath)

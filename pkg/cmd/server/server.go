@@ -1,29 +1,28 @@
 package server
 
 import (
-	"fmt"
 	"log/slog"
 	"net/http"
-	"os"
-	"path/filepath"
-	"strings"
 
 	"github.com/spf13/cobra"
 	"github.com/wzshiming/gh-gpt/pkg/api"
 	"github.com/wzshiming/gh-gpt/pkg/auth"
 	"github.com/wzshiming/gh-gpt/pkg/cache"
 	"github.com/wzshiming/gh-gpt/pkg/server"
+	"github.com/wzshiming/gh-gpt/pkg/utils"
 )
 
 type serverOptions struct {
-	TokenCachePath string
-	Address        string
+	Address          string
+	TokenCachePath   string
+	GHTokenCachePath string
 }
 
 func NewCommand() *cobra.Command {
 	opts := serverOptions{
-		TokenCachePath: "~/.gh-gpt/token.json",
-		Address:        ":8000",
+		Address:          ":8000",
+		TokenCachePath:   "~/.gh-gpt/token.json",
+		GHTokenCachePath: "~/.gh-gpt/gh-token.json",
 	}
 	cmd := &cobra.Command{
 		Use:   "server",
@@ -37,26 +36,25 @@ func NewCommand() *cobra.Command {
 
 	cmd.Flags().StringVar(&opts.Address, "address", opts.Address, "address")
 	cmd.Flags().StringVar(&opts.TokenCachePath, "token-cache-path", opts.TokenCachePath, "token cache path")
-
+	cmd.Flags().StringVar(&opts.GHTokenCachePath, "gh-token-cache-path", opts.GHTokenCachePath, "github token cache path")
 	return cmd
 }
 
 func run(cmd *cobra.Command, opts serverOptions) error {
-
-	auths := auth.Auths{auth.Hosts(), auth.Envs()}
+	auths := auth.Auths{}
+	if opts.GHTokenCachePath != "" {
+		tokenCachePath, err := utils.ExpandPath(opts.GHTokenCachePath)
+		if err != nil {
+			return err
+		}
+		auths = append(auths, auth.DeviceSession(tokenCachePath))
+	}
+	auths = append(auths, auth.Hosts(), auth.Envs())
 
 	var err error
-	// expand the '~' for opts.TokenCachePath
-	if strings.HasPrefix(opts.TokenCachePath, "~") {
-		home, err := os.UserHomeDir()
-		if err != nil {
-			return fmt.Errorf("failed to get home dir: %w", err)
-		}
-		opts.TokenCachePath = filepath.Join(home, opts.TokenCachePath[1:])
-	}
-	opts.TokenCachePath, err = filepath.Abs(opts.TokenCachePath)
+	opts.TokenCachePath, err = utils.ExpandPath(opts.TokenCachePath)
 	if err != nil {
-		return fmt.Errorf("failed to get token cache path: %w", err)
+		return err
 	}
 
 	tokenCache := cache.NewFileCache(opts.TokenCachePath)

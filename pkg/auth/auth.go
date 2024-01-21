@@ -1,6 +1,7 @@
 package auth
 
 import (
+	"context"
 	"errors"
 	"os"
 )
@@ -8,20 +9,23 @@ import (
 var ErrNotExists = os.ErrNotExist
 
 type Auth interface {
-	GetToken() (string, error)
+	GetToken(ctx context.Context) (string, error)
 }
 
 type Auths []Auth
 
-func (a Auths) GetToken() (string, error) {
+func (a Auths) GetToken(ctx context.Context) (string, error) {
+	var errs []error
 	for _, auth := range a {
-		token, err := auth.GetToken()
+		token, err := auth.GetToken(ctx)
 		if err == nil {
-			return token, nil
-		}
-		if !errors.Is(err, ErrNotExists) {
-			return "", err
+			if token != "" {
+				return token, nil
+			}
+			errs = append(errs, ErrNotExists)
+		} else {
+			errs = append(errs, err)
 		}
 	}
-	return "", ErrNotExists
+	return "", errors.Join(errs...)
 }

@@ -1,6 +1,7 @@
 package auth
 
 import (
+	"context"
 	"encoding/json"
 	"os"
 	"path"
@@ -13,7 +14,7 @@ func Hosts() Auth {
 	return hostsAuth{}
 }
 
-func (hostsAuth) GetToken() (string, error) {
+func (hostsAuth) GetToken(ctx context.Context) (string, error) {
 	home, err := os.UserHomeDir()
 	if err != nil {
 		return "", err

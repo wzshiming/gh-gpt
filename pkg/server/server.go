@@ -66,7 +66,7 @@ func (s *Server) ChatCompletions(w http.ResponseWriter, r *http.Request) {
 	oauthToken := strings.TrimPrefix(r.Header.Get("Authorization"), "Bearer ")
 	if oauthToken == "" {
 		var err error
-		oauthToken, err = s.auth.GetToken()
+		oauthToken, err = s.auth.GetToken(r.Context())
 		if err != nil {
 			respJSONError(w, http.StatusInternalServerError, err.Error())
 			return

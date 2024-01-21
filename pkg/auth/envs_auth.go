@@ -1,6 +1,7 @@
 package auth
 
 import (
+	"context"
 	"os"
 )
 
@@ -10,7 +11,7 @@ func Envs() Auth {
 	return envsAuth{}
 }
 
-func (envsAuth) GetToken() (string, error) {
+func (envsAuth) GetToken(ctx context.Context) (string, error) {
 	token, ok := os.LookupEnv("GH_COPILOT_TOKEN")
 	if !ok {
 		token, ok = os.LookupEnv("GH_TOKEN")

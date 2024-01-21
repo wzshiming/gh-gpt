@@ -2,6 +2,8 @@ package cmd
 
 import (
 	"github.com/spf13/cobra"
+	"github.com/wzshiming/gh-gpt/pkg/cmd/login"
+	"github.com/wzshiming/gh-gpt/pkg/cmd/logout"
 	"github.com/wzshiming/gh-gpt/pkg/cmd/ping"
 	"github.com/wzshiming/gh-gpt/pkg/cmd/run"
 	"github.com/wzshiming/gh-gpt/pkg/cmd/server"
@@ -20,6 +22,8 @@ func NewCommand() *cobra.Command {
 		run.NewCommand(),
 		server.NewCommand(),
 		ping.NewCommand(),
+		login.NewCommand(),
+		logout.NewCommand(),
 	)
 	return cmd
 }
