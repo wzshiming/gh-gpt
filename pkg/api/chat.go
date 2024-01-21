@@ -23,6 +23,9 @@ func (c *Client) ChatCompletions(ctx context.Context, token string, chatRequest 
 		}
 		return fn(chatResponse)
 	}
+	if chatRequest.N == 0 {
+		chatRequest.N = 1
+	}
 
 	if chatRequest.Stream {
 		return c.stream(ctx, token, defaultCompletionsURI, chatRequest, f)
@@ -45,8 +48,10 @@ func (c *Client) do(ctx context.Context, token string, path string, data any) (*
 	if err != nil {
 		return nil, err
 	}
-
-	setReqHeaders(req.Header, token)
+	for key, value := range chatHeaders {
+		req.Header.Set(key, value)
+	}
+	req.Header.Set("Authorization", "Bearer "+token)
 
 	return c.client.Do(req)
 }
@@ -122,9 +127,12 @@ func (c *Client) request(ctx context.Context, token string, path string, data an
 }
 
 type ChatRequest struct {
-	Model    string    `json:"model"`
-	Messages []Message `json:"messages"`
-	Stream   bool      `json:"stream,omitempty"`
+	Model       string    `json:"model"`
+	Messages    []Message `json:"messages"`
+	Stream      bool      `json:"stream,omitempty"`
+	Temperature float64   `json:"temperature"`
+	TopP        float64   `json:"top_p"`
+	N           int64     `json:"n"`
 }
 
 type Message struct {
@@ -157,12 +165,11 @@ type FilterResult struct {
 	Severity string `json:"severity"`
 }
 
-func setReqHeaders(h http.Header, authorization string) {
-	h.Set("Authorization", "Bearer "+authorization)
-	h.Set("Editor-Version", "vscode/1.83.1")
-	h.Set("Editor-Plugin-Version", "copilot-chat/0.8.0")
-	h.Set("Openai-Organization", "github-copilot")
-	h.Set("Openai-Intent", "conversation-panel")
-	h.Set("Content-Type", "text/event-stream; charset=utf-8")
-	h.Set("User-Agent", userAgent)
+var chatHeaders = map[string]string{
+	"Editor-Version":        editorVersion,
+	"Editor-Plugin-Version": editorPluginVersion,
+	"User-Agent":            userAgent,
+	"Openai-Organization":   openaiOrg,
+	"Openai-Intent":         openaiIntent,
+	"Content-Type":          "text/event-stream; charset=utf-8",
 }

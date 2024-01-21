@@ -22,7 +22,11 @@ func WithHTTPClient(c *http.Client) func(*Client) {
 }
 
 const (
-	userAgent = "GitHubCopilotChat/0.8.0"
+	userAgent           = "GitHubCopilotChat/0.8.0"
+	editorVersion       = "vscode/1.83.1"
+	editorPluginVersion = "copilot-chat/0.8.0"
+	openaiOrg           = "github-copilot"
+	openaiIntent        = "conversation-panel"
 )
 
 type Client struct {
